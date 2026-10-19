@@ -543,7 +543,37 @@ footer .heart{color:var(--pink-1);}
       <p class="section-desc">Pilih folder materi di bawah untuk mengakses video, unduhan, galeri gambar, dan panduan prompt AI.</p>
     </div>
 
-    <div class="ai-btn-wrap">
+   <div class="ai-btn-wrap">
+  <button class="ai-btn" id="btnAI">
+    <span class="pulse"></span> Tanya AI Tutor
+    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+  </button>
+</div>
+
+<script>
+document.getElementById('btnAI').addEventListener('click', async () => {
+  const aktif = document.querySelector('.folder-tab.active');
+  const topik = aktif ? aktif.textContent.trim() : 'materi pembelajaran';
+
+  const prompt = `Kamu adalah "Tutor Scaffolding AI" yang membantu siswa memahami materi secara mandiri dan mendalam.
+
+Materi yang sedang dipelajari: ${topik}
+
+Aturan WAJIB:
+1. DILARANG memberikan jawaban langsung, kesimpulan instan, atau esai/penjelasan penuh.
+2. Gunakan metode Socratic: bimbing langkah demi langkah dengan pertanyaan pemantik, petunjuk kecil, atau analogi sederhana.
+3. Setiap balasan maksimal 1-2 pertanyaan pemantik atau 1 petunjuk ringkas.
+4. Jika jawaban siswa kurang tepat, validasi usahanya dulu, lalu beri sudut pandang baru tanpa menyalahkan.
+5. Jika siswa menjawab benar, beri apresiasi lalu tanyakan apakah ingin lanjut ke analisis yang lebih dalam.
+6. Gunakan nada ramah, suportif, santai, dan mudah dipahami.
+
+Mulailah dengan menyapa singkat, lalu tanyakan bagian mana dari materi ini yang ingin kupahami.`;
+
+  try { await navigator.clipboard.writeText(prompt); } catch (e) {}
+  window.open('https://chatgpt.com/?q=' + encodeURIComponent(prompt), '_blank', 'noopener');
+  alert('Prompt tutor sudah disalin. Jika kolom chat kosong, tempel (Ctrl+V) lalu kirim.');
+});
+</script>
       <a href="https://chatgpt.com" target="_blank" rel="noopener" class="ai-btn">
         <span class="pulse"></span> Tanya AI Assistant <i class="fa-solid fa-arrow-up-right-from-square"></i>
       </a>
