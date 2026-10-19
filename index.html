@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Modul Interaktif | Belajar Asyik, Paham Cepat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+/* ============ ROOT & RESET ============ */
+:root{
+  --biru-1:#5B9CF6;
+  --biru-2:#8FC1FF;
+  --pink-1:#F472B6;
+  --pink-2:#FBCFE8;
+  --ungu:#A78BFA;
+  --bg-1:#EEF4FF;
+  --bg-2:#FDF1F8;
+  --bg-3:#F3EEFF;
+  --ink:#26293B;
+  --ink-soft:#5A5F7A;
+  --card-bg:rgba(255,255,255,0.68);
+  --card-border:rgba(255,255,255,0.9);
+  --radius-lg:26px;
+  --radius-md:18px;
+  --radius-sm:12px;
+  --shadow-soft:0 10px 30px -10px rgba(91,156,246,0.25);
+  --shadow-pink:0 10px 30px -10px rgba(244,114,182,0.35);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Inter',sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 8% 12%, rgba(143,193,255,0.35), transparent 45%),
+    radial-gradient(circle at 92% 18%, rgba(251,207,232,0.45), transparent 40%),
+    radial-gradient(circle at 15% 90%, rgba(167,139,250,0.22), transparent 40%),
+    linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 55%, var(--bg-3) 100%);
+  background-attachment:fixed;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;}
+a{text-decoration:none;color:inherit;}
+button{font-family:inherit;cursor:pointer;border:none;}
+ul{list-style:none;}
+img{max-width:100%;display:block;}
+::selection{background:var(--pink-1);color:#fff;}
+
+/* Focus visibility for a11y */
+a:focus-visible, button:focus-visible{outline:3px solid var(--ungu);outline-offset:2px;border-radius:8px;}
+
+/* Floating ambient blobs (signature background motion) */
+.blob{position:fixed;border-radius:50%;filter:blur(60px);opacity:0.55;z-index:-1;animation:float 16s ease-in-out infinite;}
+.blob1{width:340px;height:340px;background:linear-gradient(135deg,var(--biru-2),var(--biru-1));top:-100px;left:-100px;animation-delay:0s;}
+.blob2{width:280px;height:280px;background:linear-gradient(135deg,var(--pink-2),var(--pink-1));bottom:-80px;right:-60px;animation-delay:3s;}
+.blob3{width:220px;height:220px;background:linear-gradient(135deg,var(--ungu),var(--biru-2));top:45%;right:10%;animation-delay:6s;}
+@keyframes float{
+  0%,100%{transform:translate(0,0) scale(1);}
+  50%{transform:translate(25px,-30px) scale(1.08);}
+}
+@media (prefers-reduced-motion: reduce){
+  .blob{animation:none;}
+  *{scroll-behavior:auto !important;}
+}
+
+/* ============ NAVBAR ============ */
+.navbar{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 32px;
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,0.6);
+}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Poppins',sans-serif;font-weight:700;font-size:1.05rem;}
+.brand .logo-icon{
+  width:38px;height:38px;border-radius:12px;
+  background:linear-gradient(135deg,var(--biru-1),var(--pink-1));
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;
+  box-shadow:var(--shadow-soft);
+}
+.brand span{background:linear-gradient(90deg,var(--biru-1),var(--pink-1));-webkit-background-clip:text;background-clip:text;color:transparent;}
+
+.nav-menu{display:flex;gap:4px;align-items:center;flex-wrap:wrap;}
+.nav-menu li a{
+  display:flex;align-items:center;gap:7px;
+  padding:9px 14px;border-radius:999px;
+  font-size:0.85rem;font-weight:600;color:var(--ink-soft);
+  transition:all .25s ease;position:relative;white-space:nowrap;
+}
+.nav-menu li a i{font-size:0.85rem;}
+.nav-menu li a:hover{background:rgba(255,255,255,0.8);color:var(--biru-1);}
+.nav-menu li a.active{
+  color:#fff;
+  background:linear-gradient(90deg,var(--biru-1),var(--pink-1));
+  box-shadow:var(--shadow-soft);
+}
+.nav-toggle{display:none;background:none;font-size:1.4rem;color:var(--biru-1);}
+
+@media (max-width:1080px){
+  .nav-menu{
+    position:fixed;top:66px;right:0;left:0;
+    flex-direction:column;align-items:stretch;
+    background:rgba(255,255,255,0.96);
+    backdrop-filter:blur(10px);
+    padding:12px;gap:6px;
+    max-height:0;overflow:hidden;
+    transition:max-height .35s ease;
+    border-bottom:1px solid rgba(0,0,0,0.05);
+  }
+  .nav-menu.open{max-height:640px;}
+  .nav-menu li a{justify-content:flex-start;}
+  .nav-toggle{display:block;}
+}
+
+/* ============ LAYOUT WRAP ============ */
+.page-wrap{max-width:1180px;margin:0 auto;padding:44px 24px 90px;}
+.section{display:none;animation:fadeSlide .5s ease;}
+.section.active{display:block;}
+@keyframes fadeSlide{
+  from{opacity:0;transform:translateY(14px);}
+  to{opacity:1;transform:translateY(0);}
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:0.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--pink-1);background:rgba(244,114,182,0.12);
+  padding:6px 14px;border-radius:999px;margin-bottom:14px;
+}
+.section-title{font-size:clamp(1.6rem,3.2vw,2.3rem);font-weight:700;margin-bottom:10px;color:var(--ink);}
+.section-desc{color:var(--ink-soft);font-size:1rem;max-width:680px;margin-bottom:34px;line-height:1.65;}
+
+.glass-card{
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-lg);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  box-shadow:var(--shadow-soft);
+}
+
+/* ============ BERANDA ============ */
+.hero{
+  text-align:center;padding:50px 20px 40px;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg, rgba(143,193,255,0.28), rgba(251,207,232,0.35));
+  border:1px solid rgba(255,255,255,0.7);
+  margin-bottom:40px;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%, rgba(255,255,255,0.6), transparent 60%);
+}
+.hero-badge{
+  position:relative;display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.75);padding:7px 16px;border-radius:999px;
+  font-size:0.78rem;font-weight:600;color:var(--biru-1);margin-bottom:18px;
+  box-shadow:0 4px 14px rgba(0,0,0,0.05);
+}
+.hero h1{
+  position:relative;font-size:clamp(2.1rem,5.4vw,3.6rem);font-weight:800;line-height:1.15;
+  background:linear-gradient(100deg,var(--biru-1) 10%,var(--ungu) 50%,var(--pink-1) 90%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  margin-bottom:16px;
+}
+.hero p{position:relative;max-width:640px;margin:0 auto;color:var(--ink-soft);font-size:1.05rem;line-height:1.7;}
+.hero-stats{position:relative;display:flex;justify-content:center;gap:30px;margin-top:30px;flex-wrap:wrap;}
+.hero-stats div{text-align:center;}
+.hero-stats strong{display:block;font-size:1.4rem;font-family:'Poppins',sans-serif;color:var(--ink);}
+.hero-stats span{font-size:0.78rem;color:var(--ink-soft);}
+
+.profile-section{margin-top:10px;}
+.profile-section h2{font-size:1.4rem;margin-bottom:4px;font-weight:700;}
+.profile-section .sub{color:var(--ink-soft);margin-bottom:22px;font-size:0.95rem;}
+.profile-card{
+  display:flex;align-items:center;gap:24px;padding:28px;flex-wrap:wrap;
+}
+.profile-card img{
+  width:110px;height:110px;border-radius:50%;
+  border:4px solid #fff;box-shadow:var(--shadow-pink);
+  background:linear-gradient(135deg,var(--biru-2),var(--pink-2));
+}
+.profile-info h3{font-size:1.25rem;margin-bottom:4px;}
+.profile-info .role{color:var(--pink-1);font-weight:600;font-size:0.9rem;margin-bottom:8px;}
+.profile-info p{color:var(--ink-soft);font-size:0.92rem;line-height:1.6;}
+.profile-tags{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.profile-tags span{
+  background:rgba(91,156,246,0.12);color:var(--biru-1);
+  font-size:0.75rem;font-weight:600;padding:5px 12px;border-radius:999px;
+}
+
+/* ============ PETUNJUK - TIMELINE ============ */
+.timeline{position:relative;padding-left:6px;}
+.timeline::before{
+  content:'';position:absolute;left:27px;top:10px;bottom:10px;width:3px;
+  background:linear-gradient(180deg,var(--biru-1),var(--pink-1));border-radius:3px;
+}
+.tl-item{display:flex;gap:22px;padding:0 0 32px;position:relative;}
+.tl-item:last-child{padding-bottom:0;}
+.tl-icon{
+  flex-shrink:0;width:56px;height:56px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.3rem;
+  background:linear-gradient(135deg,var(--biru-1),var(--ungu));
+  box-shadow:var(--shadow-soft);z-index:1;
+}
+.tl-item:nth-child(even) .tl-icon{background:linear-gradient(135deg,var(--pink-1),var(--ungu));box-shadow:var(--shadow-pink);}
+.tl-content{padding:18px 22px;flex:1;}
+.tl-content h4{font-size:1.05rem;margin-bottom:6px;}
+.tl-content p{color:var(--ink-soft);font-size:0.92rem;line-height:1.6;}
+
+/* ============ KOMPETENSI ============ */
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+@media (max-width:900px){.grid-3{grid-template-columns:1fr;}}
+.komp-card{padding:26px;position:relative;overflow:hidden;}
+.komp-card .icon-top{
+  width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:1.25rem;margin-bottom:16px;
+}
+.komp-card:nth-child(1) .icon-top{background:linear-gradient(135deg,var(--biru-1),var(--biru-2));}
+.komp-card:nth-child(2) .icon-top{background:linear-gradient(135deg,var(--ungu),var(--pink-1));}
+.komp-card:nth-child(3) .icon-top{background:linear-gradient(135deg,var(--pink-1),var(--pink-2));}
+.komp-card h3{font-size:1.1rem;margin-bottom:12px;}
+.komp-card ul{display:flex;flex-direction:column;gap:10px;}
+.komp-card ul li{display:flex;gap:9px;font-size:0.9rem;color:var(--ink-soft);line-height:1.5;}
+.komp-card ul li i{color:var(--pink-1);margin-top:3px;font-size:0.8rem;}
+
+/* ============ MATERI ============ */
+.ai-btn-wrap{display:flex;justify-content:flex-end;margin-bottom:28px;}
+.ai-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(90deg,var(--ungu),var(--pink-1));
+  color:#fff;padding:13px 24px;border-radius:999px;font-weight:700;font-size:0.9rem;
+  box-shadow:0 10px 25px -8px rgba(167,139,250,0.55);
+  transition:transform .25s ease, box-shadow .25s ease;
+  position:relative;
+}
+.ai-btn i.fa-sparkles, .ai-btn .pulse{
+  width:8px;height:8px;border-radius:50%;background:#fff;
+  animation:pulse 1.6s infinite;
+}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,0.7);}70%{box-shadow:0 0 0 8px rgba(255,255,255,0);}100%{box-shadow:0 0 0 0 rgba(255,255,255,0);}}
+.ai-btn:hover{transform:translateY(-3px);box-shadow:0 16px 30px -8px rgba(167,139,250,0.65);}
+
+.folder-tabs{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px;}
+.folder-tab{
+  display:flex;align-items:center;gap:10px;padding:14px 20px;border-radius:var(--radius-md);
+  background:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.8);
+  font-weight:600;font-size:0.9rem;color:var(--ink-soft);transition:all .25s ease;flex:1;min-width:200px;
+}
+.folder-tab i{
+  width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--biru-2),var(--pink-2));color:#fff;font-size:1rem;flex-shrink:0;
+}
+.folder-tab:hover{background:rgba(255,255,255,0.85);}
+.folder-tab.active{
+  background:linear-gradient(90deg,var(--biru-1),var(--pink-1));color:#fff;
+  box-shadow:var(--shadow-soft);
+}
+.folder-tab.active i{background:rgba(255,255,255,0.25);}
+
+.materi-panel{display:none;padding:30px;animation:fadeSlide .4s ease;}
+.materi-panel.active{display:block;}
+.materi-panel h3{font-size:1.2rem;margin-bottom:22px;display:flex;align-items:center;gap:10px;}
+.materi-panel h3 i{color:var(--pink-1);}
+
+.video-wrap{position:relative;padding-top:56.25%;border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-soft);margin-bottom:24px;}
+.video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+
+.materi-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:24px;}
+.dl-btn{
+  display:inline-flex;align-items:center;gap:10px;padding:12px 20px;border-radius:var(--radius-sm);
+  background:#fff;border:1.5px solid rgba(91,156,246,0.3);font-weight:600;font-size:0.85rem;color:var(--biru-1);
+  transition:all .25s ease;
+}
+.dl-btn:hover{background:linear-gradient(90deg,var(--biru-1),var(--pink-1));color:#fff;border-color:transparent;transform:translateY(-2px);}
+
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+@media(max-width:640px){.gallery{grid-template-columns:1fr 1fr;}}
+.gallery img{width:100%;height:130px;object-fit:cover;border-radius:var(--radius-sm);box-shadow:0 6px 16px rgba(0,0,0,0.08);transition:transform .3s ease;}
+.gallery img:hover{transform:scale(1.04);}
+
+.prompt-box{
+  background:linear-gradient(135deg,#2A2C42,#1E2033);color:#E9E7FF;
+  border-radius:var(--radius-md);padding:20px 22px;position:relative;
+  font-family:'Inter',monospace;font-size:0.88rem;line-height:1.7;
+  border-left:4px solid var(--pink-1);
+}
+.prompt-box .label{
+  display:flex;align-items:center;gap:8px;color:var(--pink-2);font-weight:700;
+  font-size:0.78rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;
+}
+.prompt-box p{color:#D7D5F0;}
+.prompt-box::before{content:'"';position:absolute;top:6px;right:16px;font-size:2.6rem;color:rgba(255,255,255,0.08);font-family:Georgia,serif;}
+
+/* ============ LATIHAN / LKS BUTTON GRID ============ */
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+@media(max-width:980px){.grid-4{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.grid-4{grid-template-columns:1fr;}}
+.tool-card{
+  padding:26px 22px;text-align:center;transition:transform .25s ease, box-shadow .25s ease;
+}
+.tool-card:hover{transform:translateY(-6px);box-shadow:0 18px 34px -12px rgba(91,156,246,0.35);}
+.tool-card .num{
+  width:54px;height:54px;margin:0 auto 16px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.3rem;font-weight:700;
+  background:linear-gradient(135deg,var(--biru-1),var(--pink-1));
+}
+.tool-card h4{font-size:1rem;margin-bottom:6px;}
+.tool-card p{font-size:0.82rem;color:var(--ink-soft);margin-bottom:16px;min-height:36px;}
+.tool-card .go{
+  display:inline-flex;align-items:center;gap:6px;font-size:0.8rem;font-weight:700;color:var(--pink-1);
+}
+
+.discuss-box{margin-top:34px;padding:28px;}
+.discuss-box h3{font-size:1.1rem;margin-bottom:10px;display:flex;align-items:center;gap:9px;}
+.discuss-box h3 i{color:var(--biru-1);}
+.discuss-box p{color:var(--ink-soft);font-size:0.92rem;line-height:1.7;margin-bottom:16px;}
+.discuss-input{display:flex;gap:10px;flex-wrap:wrap;}
+.discuss-input input{
+  flex:1;min-width:200px;padding:13px 16px;border-radius:999px;border:1.5px solid rgba(91,156,246,0.25);
+  background:rgba(255,255,255,0.7);font-family:inherit;font-size:0.88rem;
+}
+.discuss-input input:focus{outline:2px solid var(--biru-1);}
+.discuss-input button{
+  padding:13px 24px;border-radius:999px;background:linear-gradient(90deg,var(--biru-1),var(--pink-1));
+  color:#fff;font-weight:700;font-size:0.85rem;
+}
+
+/* ============ EVALUASI ============ */
+.eval-wrap{text-align:center;padding:60px 30px;position:relative;overflow:hidden;}
+.eval-wrap .icon-big{
+  width:90px;height:90px;border-radius:26px;margin:0 auto 24px;
+  background:linear-gradient(135deg,var(--biru-1),var(--pink-1));
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:2.2rem;
+  box-shadow:var(--shadow-pink);
+}
+.eval-wrap h2{font-size:1.6rem;margin-bottom:10px;}
+.eval-wrap p{color:var(--ink-soft);max-width:520px;margin:0 auto 30px;line-height:1.7;}
+.eval-checklist{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:34px;}
+.eval-checklist div{display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--ink-soft);}
+.eval-checklist i{color:var(--biru-1);}
+.eval-btn{
+  display:inline-flex;align-items:center;gap:12px;padding:18px 40px;border-radius:999px;
+  background:linear-gradient(90deg,var(--biru-1),var(--ungu),var(--pink-1));
+  background-size:200% auto;
+  color:#fff;font-weight:700;font-size:1.05rem;
+  box-shadow:0 16px 34px -10px rgba(244,114,182,0.5);
+  transition:all .35s ease;
+}
+.eval-btn:hover{background-position:right center;transform:translateY(-4px) scale(1.03);box-shadow:0 22px 40px -10px rgba(244,114,182,0.65);}
+
+/* ============ PENGUMPULAN TUGAS ============ */
+.tugas-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:26px;}
+@media(max-width:860px){.tugas-grid{grid-template-columns:1fr;}}
+.tugas-instr{padding:30px;}
+.tugas-instr h3{font-size:1.15rem;margin-bottom:18px;}
+.tugas-instr ol{display:flex;flex-direction:column;gap:14px;counter-reset:step;}
+.tugas-instr ol li{
+  display:flex;gap:14px;font-size:0.9rem;color:var(--ink-soft);line-height:1.6;counter-increment:step;
+}
+.tugas-instr ol li::before{
+  content:counter(step);flex-shrink:0;width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,var(--biru-1),var(--pink-1));color:#fff;font-weight:700;font-size:0.8rem;
+  display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;
+}
+.tugas-upload{padding:30px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:16px;}
+.tugas-upload i.big{font-size:2.6rem;color:var(--pink-1);}
+.tugas-upload p{color:var(--ink-soft);font-size:0.88rem;}
+.upload-btn{
+  display:inline-flex;align-items:center;gap:10px;padding:15px 28px;border-radius:999px;
+  background:linear-gradient(90deg,var(--biru-1),var(--pink-1));color:#fff;font-weight:700;font-size:0.92rem;
+  box-shadow:var(--shadow-soft);transition:all .25s ease;
+}
+.upload-btn:hover{transform:translateY(-3px);box-shadow:0 18px 30px -8px rgba(91,156,246,0.45);}
+.deadline-tag{
+  display:inline-flex;align-items:center;gap:6px;font-size:0.78rem;font-weight:600;
+  color:var(--pink-1);background:rgba(244,114,182,0.12);padding:6px 14px;border-radius:999px;
+}
+
+/* ============ FOOTER ============ */
+footer{text-align:center;padding:30px;color:var(--ink-soft);font-size:0.82rem;}
+footer .heart{color:var(--pink-1);}
+
+/* Section header row for spacing consistency */
+.section-head{margin-bottom:30px;}
+</style>
+</head>
+<body>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+  <div class="brand">
+    <div class="logo-icon"><i class="fa-solid fa-book-open"></i></div>
+    <span>E-Modul&nbsp;Interaktif</span>
+  </div>
+  <button class="nav-toggle" id="navToggle" aria-label="Buka menu"><i class="fa-solid fa-bars"></i></button>
+  <ul class="nav-menu" id="navMenu">
+    <li><a href="#" data-target="beranda" class="active"><i class="fa-solid fa-house"></i> Beranda</a></li>
+    <li><a href="#" data-target="petunjuk"><i class="fa-solid fa-map-signs"></i> Petunjuk Penggunaan</a></li>
+    <li><a href="#" data-target="kompetensi"><i class="fa-solid fa-bullseye"></i> Kompetensi</a></li>
+    <li><a href="#" data-target="materi"><i class="fa-solid fa-layer-group"></i> Materi</a></li>
+    <li><a href="#" data-target="latihan"><i class="fa-solid fa-comments"></i> Latihan &amp; Diskusi</a></li>
+    <li><a href="#" data-target="lks"><i class="fa-solid fa-file-pen"></i> LKS</a></li>
+    <li><a href="#" data-target="evaluasi"><i class="fa-solid fa-clipboard-check"></i> Evaluasi</a></li>
+    <li><a href="#" data-target="tugas"><i class="fa-solid fa-cloud-arrow-up"></i> Pengumpulan Tugas</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- ================= 1. BERANDA ================= -->
+  <section class="section active" id="beranda">
+    <div class="hero">
+      <span class="hero-badge"><i class="fa-solid fa-star"></i> Modul Digital Interaktif</span>
+      <h1>e-Modul Berbasis Socio Scientific Issue (SSI) Scaflding AI</h1>
+      <p>Modul digital ini dirancang untuk menemani perjalanan belajarmu dengan cara yang lebih interaktif, visual, dan menyenangkan. Lengkap dengan video pembelajaran, latihan soal, lembar kerja, hingga asisten AI yang siap membantu proses belajarmu kapan saja.</p>
+      <div class="hero-stats">
+        <div><strong>4</strong><span>Folder Materi</span></div>
+        <div><strong>8</strong><span>Menu Belajar</span></div>
+        <div><strong>100%</strong><span>Interaktif</span></div>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <h2>PROFIL</h2>
+      <p class="sub">Mengenal lebih dekat sosok di balik penyusunan E-Modul ini.</p>
+      <div class="glass-card profile-card">
+        <img src="Foto Vita-2.jpeg" alt="Foto profil pencipta modul">
+        <div class="profile-info">
+          <h3>VITA MILA SARI SUHARTO, S.Pd</h3>
+          <div class="role">Mahasiswa S2 Pendidikan IPA Universitas Jember</div>
+          <p>Berasal dari Kabupaten Situbondo, tertarik dengan inovatif pembelajaran untuk menciptakan pembelajaran yang inovatif dan Menyenangkan</p>
+          <div class="profile-tags">
+            <span><i class="fa-solid fa-graduation-cap"></i> Dinas Pendidikan dan Kebudayaan Kab. Situbondo</span>
+            <span><i class="fa-solid fa-envelope"></i> vitas42@guru.smp.belajar.id</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 2. PETUNJUK PENGGUNAAN ================= -->
+  <section class="section" id="petunjuk">
+    <div class="section-head">
+      <span class="eyebrow"><i class="fa-solid fa-map-signs"></i> Panduan</span>
+      <h2 class="section-title">Petunjuk Penggunaan Modul</h2>
+      <p class="section-desc">Ikuti langkah-langkah berikut secara berurutan agar proses belajarmu menggunakan E-Modul ini berjalan lancar dan maksimal.</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-icon"><i class="fa-solid fa-house"></i></div>
+        <div class="glass-card tl-content">
+          <h4>1. Mulai dari Beranda</h4>
+          <p>Baca deskripsi modul dan kenali profil pencipta untuk memahami konteks dan tujuan modul ini dibuat.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-icon"><i class="fa-solid fa-bullseye"></i></div>
+        <div class="glass-card tl-content">
+          <h4>2. Pahami Kompetensi yang Dicapai</h4>
+          <p>Kunjungi menu Kompetensi untuk mengetahui capaian pembelajaran, kompetensi, dan indikator yang menjadi target belajarmu.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-icon"><i class="fa-solid fa-layer-group"></i></div>
+        <div class="glass-card tl-content">
+          <h4>3. Pelajari Materi</h4>
+          <p>Buka menu Materi, pilih salah satu dari 4 folder, tonton video pembelajaran, unduh materi, dan lihat galeri gambar pendukung.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-icon"><i class="fa-solid fa-comments"></i></div>
+        <div class="glass-card tl-content">
+          <h4>4. Kerjakan Latihan &amp; Ikut Diskusi</h4>
+          <p>Uji pemahamanmu lewat latihan soal, dan aktif berdiskusi di kolom yang telah disediakan.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-icon"><i class="fa-solid fa-file-pen"></i></div>
+        <div class="glass-card tl-content">
+          <h4>5. Isi LKS &amp; Ikuti Evaluasi</h4>
+          <p>Lengkapi Lembar Kerja Siswa, lalu kerjakan evaluasi akhir sebagai bentuk penilaian pemahamanmu.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+        <div class="glass-card tl-content">
+          <h4>6. Kumpulkan Tugas</h4>
+          <p>Unggah seluruh tugas yang diminta melalui menu Pengumpulan Tugas sesuai batas waktu yang ditentukan.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 3. KOMPETENSI ================= -->
+  <section class="section" id="kompetensi">
+    <div class="section-head">
+      <span class="eyebrow"><i class="fa-solid fa-bullseye"></i> Target Belajar</span>
+      <h2 class="section-title">Kompetensi yang Akan Dicapai</h2>
+      <p class="section-desc">Berikut rincian capaian pembelajaran, kompetensi, dan indikator yang menjadi acuan dalam modul ini.</p>
+    </div>
+    <div class="grid-3">
+      <div class="glass-card komp-card">
+        <div class="icon-top"><i class="fa-solid fa-flag-checkered"></i></div>
+        <h3>Capaian Pembelajaran</h3>
+        <ul>
+          <li><i class="fa-solid fa-circle"></i> Menganalisis sistem organisasi kehidupan, fungsi, serta kelainan atau gangguan yang muncul pada sistem organ.</li>
+         </ul>
+      </div>
+      <div class="glass-card komp-card">
+        <div class="icon-top"><i class="fa-solid fa-layer-group"></i></div>
+        <h3>Tujuan Pembelajaran</h3>
+        <ul>
+          <li><i class="fa-solid fa-circle"></i> TP-1: Siswa dapat menganalisis fungsi pada sistem organ dengan benar.</li>
+          <li><i class="fa-solid fa-circle"></i> TP-2: Siswa dapat mengevaluasi kelainan atau gangguan yang muncul pada sistem organ dengan benar.</li>
+         </ul>
+      </div>
+      <div class="glass-card komp-card">
+        <div class="icon-top"><i class="fa-solid fa-list-check"></i></div>
+        <h3>Indikator Tujuan Pembelajaran</h3>
+        <ul>
+          <li><i class="fa-solid fa-circle"></i> Siswa dapat menganalisis fungsi organ-organ pencernaan manusia dengan tepat.</li>
+          <li><i class="fa-solid fa-circle"></i> Setelah mempelajari isu sosial siswa dapat mengevaluasi gangguan pada sistem pencernaan manusia dan cara menjaga dengan benar.</li>
+          <li><i class="fa-solid fa-circle"></i> Siswa dapat menganalisis struktur dan fungsi sistem peredaran darah dengan benar.</li>
+          <li><i class="fa-solid fa-circle"></i> Setelah mempelajari isu sosial siswa dapat mengevaluasi faktor-faktor yang memengaruhi gangguan yang muncul pada sistem peredaran darah dan cara menjaganya dengan tepat.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 4. MATERI ================= -->
+  <section class="section" id="materi">
+    <div class="section-head">
+      <span class="eyebrow"><i class="fa-solid fa-layer-group"></i> Bahan Ajar</span>
+      <h2 class="section-title">Materi Pembelajaran</h2>
+      <p class="section-desc">Pilih folder materi di bawah untuk mengakses video, unduhan, galeri gambar, dan panduan prompt AI.</p>
+    </div>
+
+    <div class="ai-btn-wrap">
+      <a href="https://chatgpt.com" target="_blank" rel="noopener" class="ai-btn">
+        <span class="pulse"></span> Tanya AI Assistant <i class="fa-solid fa-arrow-up-right-from-square"></i>
+      </a>
+    </div>
+
+    <div class="folder-tabs" id="folderTabs">
+      <button class="folder-tab active" data-folder="f1"><i class="fa-solid fa-folder"></i> Folder 1: SISTEM PENCERNAAN</button>
+      <button class="folder-tab" data-folder="f2"><i class="fa-solid fa-folder"></i> Folder 2: GANGGUAN SISTEM PENCERNAAN</button>
+      <button class="folder-tab" data-folder="f3"><i class="fa-solid fa-folder"></i> Folder 3: SISTEM PEREDARAN DARAH</button>
+      <button class="folder-tab" data-folder="f4"><i class="fa-solid fa-folder"></i> Folder 4: GANGGUAN SISTEM PEREDARAN DARAH</button>
+    </div>
+
+    <div class="glass-card">
+      <!-- Folder 1 -->
+      <div class="materi-panel active" id="f1">
+        <h3><i class="fa-solid fa-folder-open"></i> Folder 1 — Sistem Pencernaan Manusia</h3>
+        <div class="video-wrap">
+          <iframe src="Video Keracunan MBG.mp4" title="Video Pembelajaran Folder 1" allowfullscreen></iframe>
+        </div>
+        <div class="materi-row">
+          <a href="SISTEM PENCERNAAN.pptx" class="dl-btn"><i class="fa-solid fa-file-arrow-down"></i> PPT</a>
+          <a href="Buku Sistem Pencernaan.pdf" class="dl-btn"><i class="fa-solid fa-file-word"></i> Materi</a>
+        </div>
+        <div class="gallery">
+          <img src="image sistem pencernaan.webp" alt="Sistem pencernaan">
+          <img src="mulut.jpg" alt="Gambar Mulut">
+          <img src="lambung.webp" alt="Gambar Lambung">
+        </div>
+        <div class="prompt-box">
+          <div class="label"><i class="fa-solid fa-wand-magic-sparkles"></i> Petunjuk Prompt AI</div>
+          <p>"Analisislah bagaimana sistem pencernaan berfungsi dalam mencerna makanan? dan bagaimana respon organ pencernaan menolak zat makanan yang dapat membahayakan tubuh?"</p>
+        </div>
+      </div>
+      <!-- Folder 2 -->
+      <div class="materi-panel" id="f2">
+        <h3><i class="fa-solid fa-folder-open"></i> Folder 2 — Kelainan Sistem Pencernaan</h3>
+        <div class="video-wrap">
+          <iframe src="Asam Lambung.mp4" title="Video Pembelajaran Folder 2" allowfullscreen></iframe>
+        </div>
+        <div class="materi-row">
+          <a href="GANGGUAN SISTEM PENCERNAAN.pptx" class="dl-btn"><i class="fa-solid fa-file-arrow-down"></i> PPT </a>
+          <a href="Buku Kelainan SP.pdf" class="dl-btn"><i class="fa-solid fa-file-word"></i> Materi (PDF)</a>
+        </div>
+        <div class="gallery">
+          <img src="GERD.jfif" alt="GERD">
+          <img src="GIGI LOBANG.jfif" alt="GIGI LOBANG">
+          <img src="USUS BUNTU.jfif" alt="USUS BUNTU">
+        </div>
+        <div class="prompt-box">
+          <div class="label"><i class="fa-solid fa-wand-magic-sparkles"></i> Petunjuk Prompt AI</div>
+          <p>"analisislah tentang Asam lambung dapat menjaga kesehatan sekaligus membahayakan keselamatan"</p>
+        </div>
+      </div>
+      <!-- Folder 3 -->
+      <div class="materi-panel" id="f3">
+        <h3><i class="fa-solid fa-folder-open"></i> Folder 3 — Sistem Peredaran Darah Manusia</h3>
+        <div class="video-wrap">
+          <iframe src="Pelari meninggal.mp4" title="Video Pembelajaran Folder 3" allowfullscreen></iframe>
+        </div>
+        <div class="materi-row">
+          <a href="SISTEM PEREDARAN DARAH.pptx" class="dl-btn"><i class="fa-solid fa-file-arrow-down"></i> PPT</a>
+          <a href="Buku Sistem PD.pdf" class="dl-btn"><i class="fa-solid fa-file-word"></i> Materi (PDF)</a>
+        </div>
+        <div class="gallery">
+          <img src="letak JANTUNG.jfif" alt="letak JANTUNG">
+          <img src="JANTUNG.jfif" alt="JANTUNG">
+          <img src="PEMBULUH DARAH.jfif" alt="PEMBULUH DARAH">
+        </div>
+        <div class="prompt-box">
+          <div class="label"><i class="fa-solid fa-wand-magic-sparkles"></i> Petunjuk Prompt AI</div>
+          <p>"Analisislah fungsi jantung dengan asupan oksigen ke otak dan hubungan antara aktifitas fisik dengan fungsi jantung"</p>
+        </div>
+      </div>
+      <!-- Folder 4 -->
+      <div class="materi-panel" id="f4">
+        <h3><i class="fa-solid fa-folder-open"></i> Folder 4 — Kelainan Sistem Peredaran Darah</h3>
+        <div class="video-wrap">
+          <iframe src="Stroke Mengintai Usia Muda.mp4" title="Video Pembelajaran Folder 4" allowfullscreen></iframe>
+        </div>
+        <div class="materi-row">
+          <a href="GANGGUAN SISTEM PD.pptx" class="dl-btn"><i class="fa-solid fa-file-arrow-down"></i> PPT</a>
+          <a href="Buku Kelainan SPD.pdf" class="dl-btn"><i class="fa-solid fa-file-word"></i> Materi (PDF)</a>
+        </div>
+        <div class="gallery">
+          <img src="ARTERIOSKLEROSIS.jfif" alt="ARTERIOSKLEROSIS">
+          <img src="KORONER.jfif" alt="KORONER">
+          <img src="STROKE.jfif" alt="STROKE">
+        </div>
+        <div class="prompt-box">
+          <div class="label"><i class="fa-solid fa-wand-magic-sparkles"></i> Petunjuk Prompt AI</div>
+          <p>"Analisislah bagaimana stroke dapat membahayakan kesehatan"</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 5. LATIHAN SOAL ================= -->
+  <section class="section" id="latihan">
+    <div class="section-head">
+      <span class="eyebrow"><i class="fa-solid fa-comments"></i> Uji Pemahaman</span>
+      <h2 class="section-title">Latihan Soal</h2>
+      <p class="section-desc">Kerjakan latihan soal berikut untuk mengukur pemahamanmu, lalu lanjutkan diskusi bersama teman-teman.</p>
+    </div>
+    <div class="grid-4">
+      <a href="https://forms.gle/Byfsn5ps83K6kdbt8" target="_blank" rel="noopener" class="glass-card tool-card">
+        <div class="num">1</div>
+        <h4>Latihan Soal 1</h4>
+        <p>Studi kasus terapan SP</p>
+        <span class="go">Buka Soal <i class="fa-solid fa-arrow-right"></i></span>
+      </a>  
+     <a href="https://app.lumi.education/run/WOPfux" target="_blank" rel="noopener" class="glass-card tool-card">
+    <div class="num">2</div>
+    <h4>Latihan Soal 2</h4>
+    <p>Game Edukasi Sistem Pencernaan</p>
+    <span class="go">
+        Mainkan Game
+        <i class="fa-solid fa-gamepad"></i>
+    </span>
+</a>
+      <a href="https://forms.gle/9ndGuxVEG6xaJFWk6" target="_blank" rel="noopener" class="glass-card tool-card">
+        <div class="num">3</div>
+        <h4>Latihan Soal 3</h4>
+        <p>Studi kasus terapan SPD</p>
+        <span class="go">Buka Soal <i class="fa-solid fa-arrow-right"></i></span>
+      </a>
+      <a href="https://detektif-peredaran-darah.netlify.app" target="_blank" rel="noopener" class="glass-card tool-card">
+        <div class="num">4</div>
+        <h4>Latihan Soal 4</h4>
+        <p>Game Edukasi Sistem Peredaran Darah</p>
+        <span class="go">
+           Mainkan Game
+           <i class="fa-solid fa-gamepad"></i>
+        </span>
+      </a>
+    </div>
+
+     </section>
+
+  <!-- ================= 6. LKS ================= -->
+  <section class="section" id="lks">
+    <div class="section-head">
+      <span class="eyebrow"><i class="fa-solid fa-file-pen"></i> Lembar Kerja</span>
+      <h2 class="section-title">LKS (Lembar Kerja Siswa)</h2>
+      <p class="section-desc">Unduh dan kerjakan Lembar Kerja Siswa berikut sesuai instruksi yang tertera pada masing-masing dokumen.</p>
+    </div>
+    <div class="grid-4">
+      <a href="https://classroom.google.com/c/ODczMzAxNDAyMTgy?cjc=yqvgakyg" target="_blank" rel="noopener" class="glass-card tool-card">
+        <div class="num"><i class="fa-solid fa-file-lines"></i></div>
+        <h4>LKS 1</h4>
+        <p>Eksplorasi konsep dasar</p>
+        <span class="go">Buka LKS <i class="fa-solid fa-arrow-right"></i></span>
+      </a>
+      <a href="https://classroom.google.com/c/ODczMzAxNDAyMTgy?cjc=yqvgakyg" target="_blank" rel="noopener" class="glass-card tool-card">
+        <div class="num"><i class="fa-solid fa-file-lines"></i></div>
+        <h4>LKS 2</h4>
+        <p>Pengamatan &amp; analisis</p>
+        <span class="go">Buka LKS <i class="fa-solid fa-arrow-right"></i></span>
+      </a>
+      <a href="https://classroom.google.com/c/ODczMzAxNDAyMTgy?cjc=yqvgakyg" target="_blank" rel="noopener" class="glass-card tool-card">
+        <div class="num"><i class="fa-solid fa-file-lines"></i></div>
+        <h4>LKS 3</h4>
+        <p>Praktik &amp; penerapan</p>
+        <span class="go">Buka LKS <i class="fa-solid fa-arrow-right"></i></span>
+      </a>
+      <a href="https://classroom.google.com/c/ODczMzAxNDAyMTgy?cjc=yqvgakyg" target="_blank" rel="noopener" class="glass-card tool-card">
+        <div class="num"><i class="fa-solid fa-file-lines"></i></div>
+        <h4>LKS 4</h4>
+        <p>Refleksi &amp; kesimpulan</p>
+        <span class="go">Buka LKS <i class="fa-solid fa-arrow-right"></i></span>
+      </a>
+    </div>
+     <div class="ai-btn-wrap">
+      <a href="https://chatgpt.com" target="_blank" rel="noopener" class="ai-btn">
+        <span class="pulse"></span> Tanya AI Assistant <i class="fa-solid fa-arrow-up-right-from-square"></i>
+      </a>
+    </div>
+  </section>
+
+  <!-- ================= 7. EVALUASI ================= -->
+  <section class="section" id="evaluasi">
+    <div class="section-head">
+      <span class="eyebrow"><i class="fa-solid fa-clipboard-check"></i> Penilaian Akhir</span>
+      <h2 class="section-title">Evaluasi</h2>
+      <p class="section-desc">Saatnya menguji seberapa jauh pemahamanmu terhadap keseluruhan materi dalam modul ini.</p>
+    </div>
+    <div class="glass-card eval-wrap">
+      <div class="icon-big"><i class="fa-solid fa-graduation-cap"></i></div>
+      <h2>Siap Menguji Pemahamanmu?</h2>
+      <p>Evaluasi terdiri dari soal pilihan ganda dan uraian singkat yang mencakup seluruh materi. Pastikan koneksi internetmu stabil sebelum memulai.</p>
+      <div class="eval-checklist">
+        <div><i class="fa-solid fa-clock"></i> 15 Menit</div>
+        <div><i class="fa-solid fa-list-ol"></i> Uraian Terbuka</div>
+        <div><i class="fa-solid fa-rotate"></i> 1x Kesempatan</div>
+      </div>
+      <a href="https://forms.gle/KPfqpWTfqjNMRg8w8" target="_blank" rel="noopener" class="eval-btn">
+        <i class="fa-solid fa-pen-to-square"></i> Mulai Evaluasi
+      </a>
+    </div>
+  </section>
+
+  <!-- ================= 8. PENGUMPULAN TUGAS ================= -->
+  <section class="section" id="tugas">
+    <div class="section-head">
+      <span class="eyebrow"><i class="fa-solid fa-cloud-arrow-up"></i> Tahap Akhir</span>
+      <h2 class="section-title">Pengumpulan Tugas</h2>
+      <p class="section-desc">Kumpulkan seluruh tugas yang telah dikerjakan sesuai instruksi dan tenggat waktu berikut.</p>
+    </div>
+    <div class="tugas-grid">
+      <div class="glass-card tugas-instr">
+        <h3>Instruksi Pengumpulan</h3>
+        <ol>
+          <li>Pastikan tugas ditulis rapi dan sesuai format yang diminta (PDF/foto jelas).</li>
+          <li>Beri nama file dengan format: <strong>Nama_Kelas_TugasModul</strong>.</li>
+          <li>Klik tombol "Unggah Tugas Di Sini" untuk membuka folder pengumpulan.</li>
+          <li>Unggah file tugasmu ke dalam folder Google Drive yang tersedia.</li>
+          <li>Konfirmasi pengumpulan kepada guru melalui forum diskusi jika diperlukan.</li>
+        </ol>
+      </div>
+      <div class="glass-card tugas-upload">
+        <i class="fa-solid fa-cloud-arrow-up big"></i>
+        <span class="deadline-tag"><i class="fa-solid fa-hourglass-half"></i> Batas waktu: sesuai arahan guru</span>
+        <p>Klik tombol di bawah untuk membuka folder Google Drive pengumpulan tugas milik pencipta modul.</p>
+        <a href="https://drive.google.com/drive/folders/1nXziNAhV_1TkbyT0NUJEFrWTVZLSMtzL?usp=drive_link" target="_blank" rel="noopener" class="upload-btn">
+          <i class="fa-brands fa-google-drive"></i> Unggah Tugas Di Sini
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  Dibuat dengan <span class="heart"><i class="fa-solid fa-heart"></i></span> untuk mendukung proses belajar &bull; E-Modul Interaktif &copy; 2026
+</footer>
+
+<script>
+// ============ NAVIGASI SPA ============
+const navLinks = document.querySelectorAll('.nav-menu a');
+const sections = document.querySelectorAll('.section');
+const navMenu = document.getElementById('navMenu');
+const navToggle = document.getElementById('navToggle');
+
+navLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = link.getAttribute('data-target');
+
+    navLinks.forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+
+    sections.forEach(sec => {
+      sec.classList.toggle('active', sec.id === target);
+    });
+
+    window.scrollTo({top:0, behavior:'smooth'});
+    navMenu.classList.remove('open');
+  });
+});
+
+navToggle.addEventListener('click', () => {
+  navMenu.classList.toggle('open');
+});
+
+// ============ TAB FOLDER MATERI ============
+const folderTabs = document.querySelectorAll('.folder-tab');
+const materiPanels = document.querySelectorAll('.materi-panel');
+
+folderTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    const folder = tab.getAttribute('data-folder');
+    folderTabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    materiPanels.forEach(p => p.classList.toggle('active', p.id === folder));
+  });
+});
+
+// ============ MINI FORUM DISKUSI (demo lokal, tanpa backend) ============
+const discussBtn = document.querySelector('.discuss-input button');
+const discussInput = document.querySelector('.discuss-input input');
+if (discussBtn) {
+  discussBtn.addEventListener('click', () => {
+    if (discussInput.value.trim() !== '') {
+      alert('Terima kasih! Pertanyaan/tanggapanmu sudah tercatat:\\n"' + discussInput.value + '"');
+      discussInput.value = '';
+    } else {
+      discussInput.focus();
+    }
+  });
+}
+</script>
+</body>
+</html>
